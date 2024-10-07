@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets  /CSS/style.css"> <!-- CSS stylesheet -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Asset Tracker</title> 
+</head>
+<body>
+    <header>
+        <h1>Digital Asset Tracker</h1>
+    </header>
+
+    <div class="container">
+        <div class="total-amount" id="totalGBP">Total: £0.00</div>
+
+        <div class="purchase-form">
+            <h2>Add Purchase</h2>
+            <form id="purchaseForm">
+                <label for="amount">Amount (GBP):</label><br>
+                <input type="number" id="amount" name="amount" step="0.01" required><br><br>
+                <label for="date">Date of Purchase:</label><br>
+                <input type="date" id="date" name="date" required><br><br>
+                <button type="submit">Add Purchase</button>
+            </form>
+        </div>
+
+        <div class="purchase-list">
+            <h2>Purchase History</h2>
+            <ul id="purchaseList"></ul>
+        </div>
+
+        <div class="chart-container">
+            <h2>Purchase History Chart</h2>
+            <canvas id="purchaseChart" width="400" height="200"></canvas>
+            <button class="refresh-button" id="refreshButton">Refresh Chart</button>
+        </div>
+    </div>
+
+
+    <script src="assets  /JS/script.js" defer></script> <!-- Link to JavaScript file -->
+       
+</body>
+</html>
