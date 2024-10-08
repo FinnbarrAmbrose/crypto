@@ -2,12 +2,11 @@ const purchaseForm = document.getElementById('purchaseForm');
 const purchaseList = document.getElementById('purchaseList');
 const totalGBP = document.getElementById('totalGBP');
 const purchaseChartCtx = document.getElementById('purchaseChart').getContext('2d');
-const refreshButton = document.getElementById('refreshButton');
 
 // Pre-loaded purchases
 let purchases = [
-    { amount: 100.00, date: '2024-10-01' },
-    { amount: 200.00, date: '2024-10-02' }
+    { amount: 100.00, date: new Date('2024-10-01') },
+    { amount: 200.00, date: new Date('2024-10-02') }
 ];
 
 let purchaseChart;
@@ -17,10 +16,10 @@ function initializeChart() {
     purchaseChart = new Chart(purchaseChartCtx, {
         type: 'line',
         data: {
-            labels: [], // Dates
+            labels: purchases.map(purchase => purchase.date), // Dates
             datasets: [{
                 label: 'Amount (GBP)',
-                data: [], // Amounts
+                data: purchases.map(purchase => purchase.amount), // Amounts
                 borderColor: 'rgba(75, 192, 192, 1)',
                 fill: false,
                 tension: 0.1
@@ -54,7 +53,7 @@ function initializeChart() {
 
 // Update the chart data
 function updateChart() {
-    purchaseChart.data.labels = purchases.map(purchase => new Date(purchase.date));
+    purchaseChart.data.labels = purchases.map(purchase => purchase.date);
     purchaseChart.data.datasets[0].data = purchases.map(purchase => purchase.amount);
     purchaseChart.update();
 }
@@ -64,10 +63,10 @@ purchaseForm.addEventListener('submit', function(event) {
 
     // Get the values from the form
     const amount = parseFloat(document.getElementById('amount').value);
-    const date = document.getElementById('date').value;
+    const date = new Date(document.getElementById('date').value);
 
     // Check if both amount and date are valid
-    if (isNaN(amount) || date === "") {
+    if (isNaN(amount) || isNaN(date.getTime())) {
         alert("Please enter a valid amount and date.");
         return;
     }
@@ -75,9 +74,10 @@ purchaseForm.addEventListener('submit', function(event) {
     // Add the purchase to the purchases array
     purchases.push({ amount, date });
 
-    // Update the purchase list and total amount
+    // Update the purchase list, total amount, and chart
     updatePurchaseList();
     updateTotal();
+    updateChart();
 
     // Clear the form fields
     purchaseForm.reset();
@@ -90,7 +90,7 @@ function updatePurchaseList() {
     // Render each purchase in the list
     purchases.forEach((purchase) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `£${purchase.amount.toFixed(2)} on ${purchase.date}`;
+        listItem.textContent = `£${purchase.amount.toFixed(2)} on ${purchase.date.toLocaleDateString()}`;
         purchaseList.appendChild(listItem);
     });
 }
@@ -108,6 +108,3 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTotal();
     updateChart();
 });
-
-// Add an event listener to the refresh button to update the chart
-refreshButton.addEventListener('click', updateChart);
